@@ -17,6 +17,8 @@ interface RoomAmenitiesProps {
 export default function RoomAmenities({ setAmenities, selectedAmenities = [] }: RoomAmenitiesProps) {
   const [accessoires, setAccessoires] = useState<Amenity[]>([])
 
+
+
   useEffect(() => {
     fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/accessoires-chambre/`)
       .then(response => response.json())
@@ -28,14 +30,24 @@ export default function RoomAmenities({ setAmenities, selectedAmenities = [] }: 
       })
   }, [])
 
-  const handleCheckboxChange = (amenity: Amenity, isChecked: boolean) => {
+  /*const handleCheckboxChange = (amenity: Amenity, isChecked: boolean) => {
     if (isChecked) {
-      setAmenities(prev => [...prev, amenity])
+      setAmenities(prev  => [...prev, amenity])
     } else {
       setAmenities(prev => prev.filter(item => item.id !== amenity.id))
     }
   }
+*/
 
+const handleCheckboxChange = (amenity: Amenity, isChecked: boolean) => {
+  setAmenities((prev: Amenity[]) => {
+    if (isChecked) {
+      return [...prev, amenity];
+    } else {
+      return prev.filter(item => item.id !== amenity.id);
+    }
+  });
+};
   return (
     <div className="space-y-4">
       {accessoires.map(accessoire => {
