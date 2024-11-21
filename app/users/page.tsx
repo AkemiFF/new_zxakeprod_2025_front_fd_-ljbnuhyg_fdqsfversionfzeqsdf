@@ -1,4 +1,5 @@
-import AppTopbar from "@/layouts/AppTopbar";
+"use client"
+import AppTopbar from "@/layouts/AppTopBar";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -45,7 +46,7 @@ export default function Home() {
                                 <Link
                                     key={index}
                                     href={button.href}
-                                    className="block bg-white text-black rounded-lg shadow-md hover:shadow-lg transition-shadow p-4 md:p-6 flex items-center space-x-4"
+                                    className="block bg-white text-black rounded-lg shadow-md hover:shadow-lg transition-shadow p-4 md:p-6 items-center space-x-4"
                                 >
                                     <div className="w-12 h-12 flex-shrink-0">
                                         <Image
