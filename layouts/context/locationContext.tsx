@@ -1,9 +1,25 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 
-const LocationContext = createContext();
+interface Location {
+    // Define the structure of your location object here
+    // For example:
+    latitude: number;
+    longitude: number;
+}
 
-export const LocationProvider = ({ children }) => {
-    const [location, setLocation] = useState(null);
+interface LocationContextType {
+    location: Location | null;
+    setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
+}
+
+const LocationContext = createContext<LocationContextType | undefined>(undefined);
+
+interface LocationProviderProps {
+    children: ReactNode;
+}
+
+export const LocationProvider: React.FC<LocationProviderProps> = ({ children }) => {
+    const [location, setLocation] = useState<Location | null>(null);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -30,3 +46,4 @@ export const LocationProvider = ({ children }) => {
 };
 
 export default LocationContext;
+
