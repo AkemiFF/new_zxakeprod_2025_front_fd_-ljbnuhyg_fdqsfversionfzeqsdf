@@ -46,7 +46,7 @@ const CarouselContinu = () => {
               alt={`Image ${index + 1}`}
               width={200}
               height={200}
-              className="object-cover w-full h-full rounded-lg"
+              className="object-cover w-full h-[30rem] filter brightness-80 contrast-110 saturate-80 blur-sm rounded-lg"
             />
           </div>
         ))}
@@ -66,4 +66,3 @@ const CarouselContinu = () => {
 }
 
 export default CarouselContinu
-

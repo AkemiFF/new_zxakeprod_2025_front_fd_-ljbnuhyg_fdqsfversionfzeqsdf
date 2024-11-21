@@ -15,8 +15,7 @@ interface RoomAmenitiesProps {
 
 export default function RoomAmenities({ setAmenities, selectedAmenities = [] }: RoomAmenitiesProps) {
   const [accessoires, setAccessoires] = useState<Amenity[]>([])
-
-
+  const [localAmenities, setLocalAmenities] = useState<Amenity[]>(selectedAmenities) // État local pour gérer les accessoires sélectionnés
 
   useEffect(() => {
     fetch(`${UrlConfig}/api/hebergement/accessoires-chambre/`)
@@ -29,28 +28,19 @@ export default function RoomAmenities({ setAmenities, selectedAmenities = [] }: 
       })
   }, [])
 
-  /*const handleCheckboxChange = (amenity: Amenity, isChecked: boolean) => {
-    if (isChecked) {
-      setAmenities(prev  => [...prev, amenity])
-    } else {
-      setAmenities(prev => prev.filter(item => item.id !== amenity.id))
-    }
-  }
-*/
+  const handleCheckboxChange = (amenity: Amenity, isChecked: boolean) => {
+    const updatedAmenities = isChecked
+      ? [...localAmenities, amenity]
+      : localAmenities.filter(item => item.id !== amenity.id)
 
-const handleCheckboxChange = (amenity: Amenity, isChecked: boolean) => {
-  setAmenities((prev: Amenity[]) => {
-    if (isChecked) {
-      return [...prev, amenity];
-    } else {
-      return prev.filter(item => item.id !== amenity.id);
-    }
-  });
-};
+    setLocalAmenities(updatedAmenities) // Met à jour l'état local
+    setAmenities(updatedAmenities) // Met à jour les props via la fonction passée
+  }
+
   return (
     <div className="space-y-4">
       {accessoires.map(accessoire => {
-        const isChecked = selectedAmenities.some(item => item.id === accessoire.id)
+        const isChecked = localAmenities.some(item => item.id === accessoire.id)
 
         return (
           <div key={accessoire.id} className="flex items-center space-x-2">
@@ -71,4 +61,3 @@ const handleCheckboxChange = (amenity: Amenity, isChecked: boolean) => {
     </div>
   )
 }
-
