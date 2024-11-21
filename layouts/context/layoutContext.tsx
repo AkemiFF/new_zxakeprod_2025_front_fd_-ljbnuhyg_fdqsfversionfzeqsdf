@@ -1,16 +1,29 @@
-"use client"
 import { getClientAccess } from "@/util/Cookies";
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import '../../util/i18n';
 import i18n from "../../util/i18n";
 
-const LayoutContext = createContext();
+interface User {
+    id: string;
+    name: string;
+}
 
+interface LayoutContextType {
+    user: User | null;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
+    lang: string;
+    setLang: React.Dispatch<React.SetStateAction<string>>;
+}
 
+const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
-export const LayoutProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [lang, setLang] = useState("en");
+interface LayoutProviderProps {
+    children: ReactNode;
+}
+
+export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [lang, setLang] = useState<string>("en");
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -48,7 +61,6 @@ export const LayoutProvider = ({ children }) => {
                 }
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
-
                 localStorage.removeItem('user');
                 setUser(null);
             }
@@ -56,6 +68,7 @@ export const LayoutProvider = ({ children }) => {
 
         checkAccessToken();
     }, []);
+
     useEffect(() => {
         if (lang) {
             localStorage.setItem('lang', lang);
@@ -68,6 +81,6 @@ export const LayoutProvider = ({ children }) => {
         </LayoutContext.Provider>
     );
 };
-export default LayoutContext;
 
+export default LayoutContext;
 

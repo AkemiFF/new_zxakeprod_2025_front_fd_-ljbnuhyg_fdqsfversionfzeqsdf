@@ -1,21 +1,33 @@
-"use client"
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
-const AdminLayoutContext = createContext();
+interface User {
+    id: string;
+    name: string;
+}
 
-// export const AdminLayoutProvider = ({ children }) => {
+interface AdminLayoutContextType {
+    sideBar: boolean;
+    setSideBar: (value: boolean) => void;
+    user: User | null;
+    setUser: (user: User | null) => void;
+}
 
-//     const [sideBar, setSideBar] = useState(false);
+const defaultContext: AdminLayoutContextType = {
+    sideBar: false,
+    setSideBar: () => { },
+    user: null,
+    setUser: () => { }
+};
 
-//     const [user, setUser] = useState(null);
+const AdminLayoutContext = createContext<AdminLayoutContextType>(defaultContext);
 
-//     return <AdminLayoutContext.Provider value={{ sideBar, setSideBar, user, setUser }}>{children}</AdminLayoutContext.Provider>
-// }
+interface AdminLayoutProviderProps {
+    children: ReactNode;
+}
 
-export const AdminLayoutProvider = ({ children }) => {
-
+export const AdminLayoutProvider: React.FC<AdminLayoutProviderProps> = ({ children }) => {
     const [sideBar, setSideBar] = useState(false);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -34,14 +46,26 @@ export const AdminLayoutProvider = ({ children }) => {
         }
     }, [user]);
 
+    const contextValue: AdminLayoutContextType = {
+        sideBar,
+        setSideBar,
+        user,
+        setUser
+    };
+
     return (
-        <AdminLayoutContext.Provider value={{ sideBar, setSideBar, user, setUser }}>
+        <AdminLayoutContext.Provider value={contextValue}>
             {children}
         </AdminLayoutContext.Provider>
     );
 };
 
+export const useAdminLayout = () => {
+    const context = useContext(AdminLayoutContext);
+    if (!context) {
+        throw new Error('useAdminLayout must be used within an AdminLayoutProvider');
+    }
+    return context;
+};
 
 export default AdminLayoutContext;
-
-
