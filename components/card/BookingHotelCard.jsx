@@ -1,8 +1,6 @@
 import { Image } from 'primereact/image';
-import style from '../../style/components/card/BookingHotelCard.module.css';
-import { Divider } from 'primereact/divider';
 import { ScrollPanel } from 'primereact/scrollpanel';
-import { UrlConfig } from '@/util/config';
+import style from '../../style/components/card/BookingHotelCard.module.css';
 export default function BookingHotelCard(props) {
 
     const getNombreJour = (date1, date2) => {
@@ -22,7 +20,7 @@ export default function BookingHotelCard(props) {
     return (
         <div className={style.container}>
             <div className={style.image_container}>
-                <Image imageClassName={style.image} alt={props.hotel_image.image} src={UrlConfig.apiBaseUrl + props.hotel_image.image} />
+                <Image imageClassName={style.image} alt={props.hotel_image.image} src={UrlConfig + props.hotel_image.image} />
                 <div className={style.image_detail_container}>
                     <span className={style.image_title}>Place to stay | {props.hotel_name}</span>
                     <div className={style.image_label_container}>

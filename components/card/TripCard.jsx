@@ -1,9 +1,8 @@
-import { ScrollPanel } from 'primereact/scrollpanel';
-import style from './../../style/components/card/TripCard.module.css';
+import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { Image } from 'primereact/image';
-import { useRouter } from 'next/router';
-import { UrlConfig } from '@/util/config';
+import { ScrollPanel } from 'primereact/scrollpanel';
+import style from './../../style/components/card/TripCard.module.css';
 
 export default function TripCard({ href, voyage }) {
     const router = useRouter();

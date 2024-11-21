@@ -15,7 +15,7 @@ export default function Paypal(props) {
     }
     return getClientAccess()
       .then((accessToken) => {
-        fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/transactions/create/`, {
+        fetch(`${UrlConfig}/api/hebergement/transactions/create/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export default function Paypal(props) {
         "guests": props.guest
       };
 
-      return fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/check/`, {
+      return fetch(`${UrlConfig}/api/hebergement/check/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

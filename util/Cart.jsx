@@ -6,9 +6,9 @@ import { getCsrfTokenDirect } from './csrf';
 
 const FetchUser = () => {
     let access = Cookies.get('accessToken');
-    
+
     const handleFetch = (accessToken) => {
-        return fetch(`${UrlConfig.apiBaseUrl}/api/accounts/profil-client/`, {
+        return fetch(`${UrlConfig}/api/accounts/profil-client/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const addToCart = async (produitId, quantite) => {
 
     try {
         // Effectue la requête pour ajouter le produit au panier
-        const response = await fetch(`${UrlConfig.apiBaseUrl}/api/artisanat/panier/ajouter/`, {
+        const response = await fetch(`${UrlConfig}/api/artisanat/panier/ajouter/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

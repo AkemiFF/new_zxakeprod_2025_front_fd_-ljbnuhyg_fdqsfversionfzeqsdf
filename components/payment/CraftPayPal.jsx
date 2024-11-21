@@ -14,7 +14,7 @@ export default function CraftPaypal(props) {
     }
     return getClientAccess()
       .then((accessToken) => {
-        fetch(`${UrlConfig.apiBaseUrl}/api/artisanat/transactions/create/`, {
+        fetch(`${UrlConfig}/api/artisanat/transactions/create/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export default function CraftPaypal(props) {
         quantite: props.quantite
       };
 
-      return fetch(`${UrlConfig.apiBaseUrl}/api/artisanat/product/check/`, {
+      return fetch(`${UrlConfig}/api/artisanat/product/check/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

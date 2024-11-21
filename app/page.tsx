@@ -1,5 +1,6 @@
 "use client"
-import { useRouter } from "next/router";
+import Loader from "@/layouts/Loader";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <>
+      <Loader></Loader>
     </>
   )
 }

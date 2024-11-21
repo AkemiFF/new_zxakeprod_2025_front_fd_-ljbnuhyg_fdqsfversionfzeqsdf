@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Checkbox } from "@/components/ui/checkbox"
-import { UrlConfig } from '@/util/config'
+import { useEffect, useState } from 'react'
 
 interface Amenity {
   id: number
@@ -20,7 +19,7 @@ export default function RoomAmenities({ setAmenities, selectedAmenities = [] }: 
 
 
   useEffect(() => {
-    fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/accessoires-chambre/`)
+    fetch(`${UrlConfig}/api/hebergement/accessoires-chambre/`)
       .then(response => response.json())
       .then(data => {
         setAccessoires(data)

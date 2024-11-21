@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie';
-import { UrlConfig } from './config';
 
 /**
  * Enregistre les tokens dans les cookies de manière sécurisée.
@@ -99,7 +98,7 @@ const getNewAdminAccess = () => {
         return Promise.reject('No refresh token found in cookies');
     }
 
-    return fetch(`${UrlConfig.apiBaseUrl}/api/token/refresh/`, {
+    return fetch(`${UrlConfig}/api/token/refresh/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -152,7 +151,7 @@ const getNewAccess = () => {
         return Promise.reject('No refresh token found in cookies');
     }
 
-    return fetch(`${UrlConfig.apiBaseUrl}/api/token/refresh/`, {
+    return fetch(`${UrlConfig}/api/token/refresh/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -183,7 +182,7 @@ const getNewAccess = () => {
 
 const customLogin = async (email, password) => {
     try {
-        const response = await fetch(`${UrlConfig.apiBaseUrl}/api/accounts/client/login/`, {
+        const response = await fetch(`${UrlConfig}/api/accounts/client/login/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -229,7 +228,7 @@ const getNewResponsabeAccess = async () => {
         return Promise.reject('No refresh token found in cookies');
     }
 
-    return fetch(`${UrlConfig.apiBaseUrl}/api/token/refresh/`, {
+    return fetch(`${UrlConfig}/api/token/refresh/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -299,4 +298,5 @@ const getResponsableAccessToken = async () => {
     return token;
 }
 
-export { setTokensInCookies, getClientAccess, removeAccessResponsable, removeAccessClient, customLogin, getNewAccess, getResponsableAccessToken, removeAllAdminAccess, getNewResponsabeAccess, getAccessAdmin, getNewAdminAccess };
+export { customLogin, getAccessAdmin, getClientAccess, getNewAccess, getNewAdminAccess, getNewResponsabeAccess, getResponsableAccessToken, removeAccessClient, removeAccessResponsable, removeAllAdminAccess, setTokensInCookies };
+

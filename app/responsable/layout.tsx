@@ -1,5 +1,6 @@
 'use client'
 
+import { ResponsableLayoutProvider } from "@/layouts/context/responsableLayoutContext"
 import ResponsableLayout from "@/layouts/responsable/ResponsableLayout"
 
 export default function ResponsableRootLayout({
@@ -7,5 +8,8 @@ export default function ResponsableRootLayout({
 }: {
     children: React.ReactNode
 }) {
-    return <ResponsableLayout>{children}</ResponsableLayout>
+    return (
+        <ResponsableLayoutProvider>
+            <ResponsableLayout>{children}</ResponsableLayout>
+        </ResponsableLayoutProvider>)
 }

@@ -1,13 +1,12 @@
 import Image from 'next/image';
-import style from './../../style/components/card/PopularTripCard.module.css';
+import { useRouter } from 'next/navigation';
 import { ScrollPanel } from 'primereact/scrollpanel';
-import { useRouter } from 'next/router';
-import { UrlConfig } from "@/util/config"; // Assurez-vous que le chemin est correct
+import style from './../../style/components/card/PopularTripCard.module.css';
 
 export default function PopularTripCard({ voyage }) {
     const router = useRouter();
     const imageUrl = voyage && voyage.couverture_images && voyage.couverture_images.length > 0
-        ? `${UrlConfig.apiBaseUrl}${voyage.couverture_images[0].image}`
+        ? `${UrlConfig}${voyage.couverture_images[0].image}`
         : '/images/default-image.jpg';
 
     return (

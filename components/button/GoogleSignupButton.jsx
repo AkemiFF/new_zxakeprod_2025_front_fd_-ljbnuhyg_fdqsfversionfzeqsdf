@@ -1,15 +1,13 @@
-import React from "react";
+import style from "@/style/components/button/GoogleButton.module.css";
+import { firebaseConfig } from '@/util/config';
+import { getCsrfTokenDirect } from "@/util/csrf";
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import Image from "next/image";
-import style from "@/style/components/button/GoogleButton.module.css";
-import { Button } from "primereact/button";
 import Link from "next/link";
-import { getCsrfTokenDirect } from "@/util/csrf";
-import { UrlConfig } from "@/util/config";
+import { Button } from "primereact/button";
 import { Toast } from 'primereact/toast';
-import { useRef } from 'react';
-import { firebaseConfig } from '@/util/config'
+import React, { useRef } from "react";
 
 const GoogleSignupButton = () => {
     const toast = useRef(null);
@@ -19,7 +17,7 @@ const GoogleSignupButton = () => {
     const checkEmailExists = (email) => {
         const csrfToken = getCsrfTokenDirect();
 
-        fetch(`${UrlConfig.apiBaseUrl}/api/accounts/client/check-email/`, {
+        fetch(`${UrlConfig}/api/accounts/client/check-email/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
@@ -29,7 +29,7 @@ export default function FilterHandcraft(props) {
   }
 
   const getAllTypes = () => {
-    fetch(`${UrlConfig.apiBaseUrl}/api/artisanat/specifications/`)
+    fetch(`${UrlConfig}/api/artisanat/specifications/`)
       .then(res => res.json())
       .then(data => setType(data.map(item => ({
         id: item.id,

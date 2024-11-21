@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState, useContext } from 'react';
-import { Image } from 'primereact/image';
-import style from '../../style/components/card/ProductCard.module.css';
-import { Button } from 'primereact/button';
-import { useRouter } from 'next/router';
-import { UrlConfig } from '@/util/config';
-import { LikeProduct, checkIfClientLikedProduct } from '@/util/Like';
-import { Toast } from 'primereact/toast';
 import LayoutContext from '@/layouts/context/layoutContext';
+import { LikeProduct, checkIfClientLikedProduct } from '@/util/Like';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Button } from 'primereact/button';
+import { Image } from 'primereact/image';
+import { Toast } from 'primereact/toast';
+import { useContext, useEffect, useRef, useState } from 'react';
+import style from '../../style/components/card/ProductCard.module.css';
 
 export default function ProductCard(props) {
     const router = useRouter();
@@ -43,21 +42,21 @@ export default function ProductCard(props) {
     // Determine the image to display
     const coverImage = props.images.find(img => img.couverture)?.image;
     const firstImage = props.images[0]?.image;
-    const placeholderImage = '/images/artisanat/aucun_image.jpeg'; // Placeholder image if no images
+    const placeholderImage = '/placeholder.svg'; // Placeholder image if no images
 
     const imageUrl = coverImage
         ? coverImage.startsWith('http')
             ? coverImage
-            : `${UrlConfig.apiBaseUrl}${coverImage}`
+            : `${UrlConfig}${coverImage}`
         : firstImage
             ? firstImage.startsWith('http')
                 ? firstImage
-                : `${UrlConfig.apiBaseUrl}${firstImage}`
+                : `${UrlConfig}${firstImage}`
             : placeholderImage;
 
-    // console.log("Cover Image:", coverImage);
-    // console.log("First Image:", firstImage);
-    // console.log("Image URL:", imageUrl);
+    console.log("Cover Image:", coverImage);
+    console.log("First Image:", firstImage);
+    console.log("Image URL:", imageUrl);
 
     const handleLikeClick = () => {
         if (!user) {
@@ -89,7 +88,7 @@ export default function ProductCard(props) {
                     alt={props.nom_produit}
                     imageClassName={style.image_product}
                     className={style.image_product}
-                    placeholder={<Image src={placeholderImage} alt="Placeholder" />}
+                    placeholder={placeholderImage}
                 />
                 <div className={style.background}></div>
                 {props.discount != null && (

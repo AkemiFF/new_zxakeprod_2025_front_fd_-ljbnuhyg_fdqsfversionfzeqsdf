@@ -99,7 +99,7 @@ export default function BookingModal(props) {
             password: pass
         };
 
-        fetch(`${UrlConfig.apiBaseUrl}/api/accounts/pay-create-client/`, {
+        fetch(`${UrlConfig}/api/accounts/pay-create-client/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ export default function BookingModal(props) {
                 }
             })
             .then(() => {
-                fetch(`${UrlConfig.apiBaseUrl}/api/accounts/welcome-mail/`, {
+                fetch(`${UrlConfig}/api/accounts/welcome-mail/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ export default function BookingModal(props) {
             ville: city,
         };
         getClientAccess().then((accessToken) => {
-            fetch(`${UrlConfig.apiBaseUrl}/api/accounts/client/edit/`, {
+            fetch(`${UrlConfig}/api/accounts/client/edit/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ export default function BookingModal(props) {
         let access = Cookies.get('accessToken');
 
         const handleFetch = (accessToken) => {
-            return fetch(`${UrlConfig.apiBaseUrl}/api/accounts/profil-client/`, {
+            return fetch(`${UrlConfig}/api/accounts/profil-client/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

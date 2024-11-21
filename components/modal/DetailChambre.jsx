@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Dialog } from 'primereact/dialog';
-import style from '../../style/components/modal/DetailChambre.module.css';
-import { Image } from 'primereact/image';
-import { UrlConfig } from '@/util/config';
 import { Masonry } from '@mui/lab';
+import { Dialog } from 'primereact/dialog';
+import { Image } from 'primereact/image';
+import React, { useEffect, useState } from 'react';
+import style from '../../style/components/modal/DetailChambre.module.css';
 
 export default function DetailChambre(props) {
     const [roomData, setRoomData] = useState(null);
 
     useEffect(() => {
         if (props.visible && props.id) {
-            fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/get-id-chambre/${props.id}/`)
+            fetch(`${UrlConfig}/api/hebergement/get-id-chambre/${props.id}/`)
                 .then(response => response.json())
                 .then(data => setRoomData(data))
                 .catch(error => console.error('Error fetching room data:', error));
@@ -34,31 +33,31 @@ export default function DetailChambre(props) {
             <div className={style.container}>
                 <div className={style.left}>
                     {roomData.images_chambre.map((image, index) => {
-                        const imageUrl = `${UrlConfig.apiBaseUrl}${image.images}`;
-                        if (index===0) {
+                        const imageUrl = `${UrlConfig}${image.images}`;
+                        if (index === 0) {
                             return <div key={image.id} className={style.firstImage}>
-                                        <Image
-                                            className={style.firstImage_container}
-                                            imageClassName={style.firstImage}
-                                            src={imageUrl}
-                                            alt={`Room Image ${index}`}
-                                            onError={(e) => e.target.src = '/path/to/placeholder-image.jpg'} // Optionnel: image de remplacement en cas d'erreur
-                                        />
-                                    </div>
+                                <Image
+                                    className={style.firstImage_container}
+                                    imageClassName={style.firstImage}
+                                    src={imageUrl}
+                                    alt={`Room Image ${index}`}
+                                    onError={(e) => e.target.src = '/path/to/placeholder-image.jpg'} // Optionnel: image de remplacement en cas d'erreur
+                                />
+                            </div>
                         }
                     })}
                     <Masonry className={style.mansory_container} columns={2} spacing={2}>
-                        {roomData.images_chambre.map((image,index)=>{
-                            const imageUrl = `${UrlConfig.apiBaseUrl}${image.images}`;
-                            if (index!=0) {
+                        {roomData.images_chambre.map((image, index) => {
+                            const imageUrl = `${UrlConfig}${image.images}`;
+                            if (index != 0) {
                                 return <Image
-                                                key={index}
-                                                className={style.otherImage_container}
-                                                imageClassName={style.otherImage}
-                                                src={imageUrl}
-                                                alt={`Room Image ${index}`}
-                                                onError={(e) => e.target.src = '/path/to/placeholder-image.jpg'} // Optionnel: image de remplacement en cas d'erreur
-                                        />
+                                    key={index}
+                                    className={style.otherImage_container}
+                                    imageClassName={style.otherImage}
+                                    src={imageUrl}
+                                    alt={`Room Image ${index}`}
+                                    onError={(e) => e.target.src = '/path/to/placeholder-image.jpg'} // Optionnel: image de remplacement en cas d'erreur
+                                />
                             }
                         })}
                     </Masonry>
@@ -77,7 +76,7 @@ export default function DetailChambre(props) {
                         <span className={style.detail_chambre_value}>{roomData.superficie ? `${roomData.superficie} m²` : 'N/A'}</span>
                     </div> */}
                     <div className={style.detail_chambre}>
-                        <i className='pi pi-user'/>
+                        <i className='pi pi-user' />
                         <span className={style.detail_chambre_label}>Type :</span>
                         <span className={style.detail_chambre_value}>{roomData.chambre.type_chambre}</span>
                     </div>
