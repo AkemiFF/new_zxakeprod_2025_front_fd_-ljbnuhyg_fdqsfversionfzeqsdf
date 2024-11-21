@@ -3,7 +3,7 @@ import style from './../../style/components/card/HotelCard.module.css';
 import { Rating } from 'primereact/rating';
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { Button } from 'primereact/button';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { checkIfClientLikedAccomodation, LikeAccomodation } from '@/util/Like';
 import { useState, useContext, useEffect, useRef } from 'react';
 import LayoutContext from '@/layouts/context/layoutContext';

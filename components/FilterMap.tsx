@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
 export default function FilterMap(props) {

@@ -14,7 +14,7 @@ export default function ListCheckbox({ onSpecChange }: { onSpecChange: (values: 
   const [selectedValues, setSelectedValues] = useState<number[]>([])
 
   useEffect(() => {
-    fetch(`${UrlConfig.apiBaseUrl}/api/artisanat/specifications/`)
+    fetch(`${UrlConfig}/api/artisanat/specifications/`)
       .then(response => response.json())
       .then(data => {
         const formattedOptions = data.map((spec: any) => ({

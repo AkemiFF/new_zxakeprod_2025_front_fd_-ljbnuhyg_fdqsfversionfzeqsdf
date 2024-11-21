@@ -25,7 +25,7 @@ const setCookieWithExpiry = (name: string, value: string, days: number, secure =
 const verifyUserInfo = async (firebaseInfoUser: any, setIsLoggedIn: (value: boolean) => void, toast: any, setUser: (user: any) => void) => {
   try {
     const csrfToken = await getCsrfTokenDirect()
-    const response = await fetch(`${UrlConfig.apiBaseUrl}/api/accounts/client/loginwithemail/`, {
+    const response = await fetch(`${UrlConfig}/api/accounts/client/loginwithemail/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +53,7 @@ const verifyUserInfo = async (firebaseInfoUser: any, setIsLoggedIn: (value: bool
       setUser({
         username: data.username,
         id: data.id,
-        userImage: UrlConfig.apiBaseUrl + data.profilPic,
+        userImage: UrlConfig + data.profilPic,
       })
       Cookies.set("profile_user", data.profilPic, { expires: 1, secure: true, sameSite: 'Strict' })
       Cookies.set("username", parsedInfo.displayName, { expires: 1, secure: true, sameSite: 'Strict' })

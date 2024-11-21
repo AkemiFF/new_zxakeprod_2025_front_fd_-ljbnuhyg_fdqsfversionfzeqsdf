@@ -15,7 +15,7 @@ export default function TourPaypal(props) {
 
     return getClientAccess()
       .then((accessToken) => {
-        fetch(`${UrlConfig.apiBaseUrl}/api/tour/transactions/create/`, {
+        fetch(`${UrlConfig}/api/tour/transactions/create/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export default function TourPaypal(props) {
         nb_voyageur: props.nb_voyageur
       };
 
-      return fetch(`${UrlConfig.apiBaseUrl}/api/tour/voyage/check/`, {
+      return fetch(`${UrlConfig}/api/tour/voyage/check/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

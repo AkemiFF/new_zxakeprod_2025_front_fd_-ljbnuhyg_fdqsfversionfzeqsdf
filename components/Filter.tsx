@@ -1,20 +1,23 @@
 'use client'
 
-import { useContext, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/router'
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { CalendarIcon, MapPinIcon, UsersIcon } from 'lucide-react'
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
 import LocationContext from '@/layouts/context/locationContext'
+import { cn } from "@/lib/utils"
 import UrlConfig from '@/util/config'
+import { format } from "date-fns"
+import { CalendarIcon, MapPinIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
+interface Type {
+  type_name: string
+}
 export default function Filter(props) {
   const { t } = useTranslation()
   const router = useRouter()
@@ -25,21 +28,21 @@ export default function Filter(props) {
 
   const { location, setLocation } = useContext(LocationContext)
 
-  const [typeSelected, setTypeSelected] = useState(null)
-  const [types, setTypes] = useState([])
+  const [typeSelected, setTypeSelected] = useState<Type>();
+  const [types, setTypes] = useState<Type[]>([])
 
   const [date, setDate] = useState({ from: undefined, to: undefined })
   const [guest, setGuest] = useState('')
 
   const getAllLocation = () => {
-    fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/cities/`)
+    fetch(`${UrlConfig}/api/hebergement/cities/`)
       .then(res => res.json())
-      .then(data => setLocations(data))
+      // .then(data => setLocations(data))
       .catch(error => console.log(error))
   }
 
   const getAllType = () => {
-    fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/type-hebergement/`)
+    fetch(`${UrlConfig}/api/hebergement/type-hebergement/`)
       .then(res => res.json())
       .then(data => setTypes(data))
       .catch(error => console.log(error))

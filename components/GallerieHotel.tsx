@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useRef } from "react"
-import Image from "next/image"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { UrlConfig } from '@/util/config'
+import Image from "next/image"
+import { useState } from "react"
 
 interface GallerieHotelProps {
   images: { image: string }[]
@@ -33,7 +32,7 @@ export default function GallerieHotel({ images }: GallerieHotelProps) {
       <div className="grid grid-cols-4 gap-2">
         <div className="col-span-2 row-span-2">
           <Image
-            src={`${UrlConfig.apiBaseUrl}${images[0].image}`}
+            src={`${UrlConfig}${images[0].image}`}
             alt="Main image"
             width={500}
             height={500}
@@ -47,7 +46,7 @@ export default function GallerieHotel({ images }: GallerieHotelProps) {
         {images.slice(1, 4).map((image, index) => (
           <div key={index}>
             <Image
-              src={`${UrlConfig.apiBaseUrl}${image.image}`}
+              src={`${UrlConfig}${image.image}`}
               alt={`Image ${index + 2}`}
               width={250}
               height={250}
@@ -62,7 +61,7 @@ export default function GallerieHotel({ images }: GallerieHotelProps) {
         {images.length > 4 && (
           <div className="relative">
             <Image
-              src={`${UrlConfig.apiBaseUrl}${images[4].image}`}
+              src={`${UrlConfig}${images[4].image}`}
               alt="More images"
               width={250}
               height={250}
@@ -84,7 +83,7 @@ export default function GallerieHotel({ images }: GallerieHotelProps) {
             {images.map((image, index) => (
               <Image
                 key={index}
-                src={`${UrlConfig.apiBaseUrl}${image.image}`}
+                src={`${UrlConfig}${image.image}`}
                 alt={`Image ${index + 1}`}
                 width={200}
                 height={200}
@@ -104,7 +103,7 @@ export default function GallerieHotel({ images }: GallerieHotelProps) {
         <DialogContent className="max-w-7xl">
           <div className="relative">
             <Image
-              src={`${UrlConfig.apiBaseUrl}${images[activeIndex].image}`}
+              src={`${UrlConfig}${images[activeIndex].image}`}
               alt={`Full screen image ${activeIndex + 1}`}
               width={1000}
               height={1000}

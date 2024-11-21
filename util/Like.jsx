@@ -1,14 +1,13 @@
 
 import Cookies from "js-cookie";
 import { getNewAccess } from "./Cookies";
-import { UrlConfig } from "./config";
 
 const LikeProduct = async (idProduct) => {
     let access = Cookies.get('accessToken');
 
     // Fonction pour gérer le "like"
     const handleLikeOperation = async (accessToken) => {
-        return fetch(`${UrlConfig.apiBaseUrl}/api/artisanat/produit/${idProduct}/like/`, {
+        return fetch(`${UrlConfig}/api/artisanat/produit/${idProduct}/like/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +66,7 @@ const LikeAccomodation = async (idAccomodation) => {
     let access = Cookies.get('accessToken');
 
     const handleLikeOperation = async (accessToken) => {
-        return fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/${idAccomodation}/like/`, {
+        return fetch(`${UrlConfig}/api/hebergement/${idAccomodation}/like/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -144,7 +143,7 @@ const checkIfClientLikedProduct = (produitId) => {
         .then(access => {
             if (!access) return false;
 
-            return fetch(`${UrlConfig.apiBaseUrl}/api/artisanat/produits/${produitId}/liked/`, {
+            return fetch(`${UrlConfig}/api/artisanat/produits/${produitId}/liked/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access}`,
@@ -194,7 +193,7 @@ const checkIfClientLikedAccomodation = async (produitId) => {
         .then(access => {
             if (!access) return false;
 
-            return fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/${produitId}/liked/`, {
+            return fetch(`${UrlConfig}/api/hebergement/${produitId}/liked/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${access}`,

@@ -1,15 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import addToCart from '@/util/Cart';
+import { useRouter } from "next/navigation";
+import { Button } from 'primereact/button';
 import { Image } from 'primereact/image';
+import { InputNumber } from 'primereact/inputnumber';
+import { Rating } from 'primereact/rating';
+import { ScrollPanel } from 'primereact/scrollpanel';
+import { Toast } from 'primereact/toast';
+import { useEffect, useRef, useState } from 'react';
 import style from '../../style/components/card/DetailProduct.module.css';
 import ViewProduct from '../images/ViewProduct';
-import { Rating } from 'primereact/rating';
-import { Button } from 'primereact/button';
-import { ScrollPanel } from 'primereact/scrollpanel';
-import { InputNumber } from 'primereact/inputnumber';
-import { UrlConfig } from '@/util/config';
-import { useRouter } from "next/router";
-import addToCart from '@/util/Cart';
-import { Toast } from 'primereact/toast';
 import HandcraftModal from '../modal/HandcraftModal';
 
 // Fonction pour formater les critiques en notation lisible
@@ -42,7 +41,7 @@ export default function DetailProduct(props) {
 
     useEffect(() => {
         if (id) {
-            fetch(`${UrlConfig.apiBaseUrl}/api/artisanat/produit/${id}/`)
+            fetch(`${UrlConfig}/api/artisanat/produit/${id}/`)
                 .then(response => response.json())
                 .then(data => setProduct(data))
                 .catch(error => console.error('Error fetching product:', error));

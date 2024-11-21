@@ -1,6 +1,6 @@
 import { removeAllAdminAccess } from '@/util/Cookies';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import AdminLayoutContext from '../context/adminLayoutContext';
 

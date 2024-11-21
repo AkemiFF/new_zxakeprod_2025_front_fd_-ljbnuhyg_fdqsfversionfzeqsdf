@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useContext, useRef, useState } from 'react';
 import LayoutContext from './../context/layoutContext';
 

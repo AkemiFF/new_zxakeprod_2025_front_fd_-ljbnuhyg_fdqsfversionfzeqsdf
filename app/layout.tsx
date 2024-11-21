@@ -1,25 +1,14 @@
-'use client'
-
-import { Button } from "@/components/ui/button"
-import { AdminLayoutProvider } from "@/layouts/context/adminLayoutContext"
-import { LayoutProvider } from "@/layouts/context/layoutContext"
+"use client"
 import { LocationProvider } from "@/layouts/context/locationContext"
 import { NavigationProvider } from "@/layouts/context/navigation"
-import { ResponsableLayoutProvider } from "@/layouts/context/responsableLayoutContext"
-import dynamic from "next/dynamic"
 import Script from "next/script"
-import { useState } from "react"
 import './globals.css'
-
-const ChatBot = dynamic(() => import('@/components/ChatBot'), { ssr: false })
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const [visible, setVisible] = useState(false)
-
   if (process.env.NODE_ENV === 'production') {
     if (typeof window !== 'undefined') {
       document.addEventListener('contextmenu', (event) => event.preventDefault())
@@ -39,24 +28,9 @@ export default function RootLayout({
       </head>
       <body>
         <NavigationProvider>
-          <ResponsableLayoutProvider>
-            <LocationProvider>
-              <LayoutProvider>
-                <AdminLayoutProvider>
-                  <Button
-                    onClick={() => setVisible(true)}
-                    className="chat_bot_btn"
-
-                  />
-                  <ChatBot
-                    visible={visible}
-                    onHide={() => setVisible(false)}
-                  />
-                  {children}
-                </AdminLayoutProvider>
-              </LayoutProvider>
-            </LocationProvider>
-          </ResponsableLayoutProvider>
+          <LocationProvider>
+            {children}
+          </LocationProvider>
         </NavigationProvider>
 
 

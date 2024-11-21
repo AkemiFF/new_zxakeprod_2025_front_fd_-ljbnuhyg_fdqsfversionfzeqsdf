@@ -1,16 +1,16 @@
 'use client'
 
-import { useContext, useEffect, useRef, useState } from 'react'
+import { API_BASE_URL } from '@/util/config'
+import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
+import { Autoplay, EffectFade, Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Autoplay, A11y, Pagination, Scrollbar } from 'swiper/modules'
-import UrlConfig from '@/util/config'
-import LocationContext from '@/layouts/context/locationContext'
 
+// Import Swiper styles
 import 'swiper/css'
+import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
 
 interface AccommodationImage {
   name: string
@@ -29,75 +29,136 @@ const initialImages: AccommodationImage[] = [
 
 export default function SwiperCarousel() {
   const [accommodations, setAccommodations] = useState<AccommodationImage[]>(initialImages)
-  const { location } = useContext(LocationContext)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const location = "Tana"
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const swiperRef = useRef<any>(null)
 
   useEffect(() => {
     if (location) {
-      setAccommodations(initialImages)
-      fetch(`${UrlConfig.apiBaseUrl}/api/hebergement/get-image-location/${location}/`)
-        .then(response => response.json())
-        .then(data => {
+      const fetchAccommodations = async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/hebergement/get-image-location/${location}/`)
+          const data = await response.json()
+
           if (data.length < 5) {
             const additionalImages = initialImages.slice(0, 5 - data.length)
             setAccommodations([...data, ...additionalImages])
           } else {
+
             setAccommodations(data)
           }
+          console.log(data);
 
-          if (swiperRef.current && swiperRef.current.swiper) {
-            swiperRef.current.swiper.autoplay.stop()
-            swiperRef.current.swiper.slideTo(0)
-            setTimeout(() => {
-              swiperRef.current.swiper.autoplay.start()
-            }, 100)
-          }
-        })
-        .catch(error => console.error('Error fetching accommodations:', error))
+        } catch (error) {
+          console.error('Error fetching accommodations:', error)
+          setAccommodations(initialImages)
+        }
+      }
+
+      fetchAccommodations()
     }
   }, [location])
 
+  // Duplicate images to ensure continuous loop
+  const extendedImages = [...accommodations, ...accommodations, ...accommodations]
+
   return (
-    <Swiper
-      ref={swiperRef}
-      modules={[Navigation, Autoplay, A11y, Pagination, Scrollbar]}
-      spaceBetween={-5}
-      slidesPerView={2}
-      direction='horizontal'
-      loop={true}
-      autoplay={{
-        delay: 1,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: false,
-      }}
-      speed={3000}
-      centeredSlides={true}
-      freeMode={true}
-      loopAdditionalSlides={1}
-      onSwiper={(swiper) => swiper.autoplay.start()}
-      className="w-full h-[400px]"
-    >
-      {accommodations.map((img, index) => (
-        <SwiperSlide key={index}>
-          <Image
-            src={!img.static ? `${UrlConfig.apiBaseUrl + img.src}` : `${img.src}`}
-            alt={`Slide ${index + 1}`}
-            width={800}
-            height={600}
-            className="object-cover w-full h-full"
-          />
-        </SwiperSlide>
-      ))}
-      <SwiperSlide>
-        <Image
-          src="/images/hotel/hotel.jpg"
-          alt="metal sculpture"
-          width={800}
-          height={600}
-          className="object-cover w-full h-full"
-        />
-      </SwiperSlide>
-    </Swiper>
+    <div className="relative w-full h-[700px] overflow-hidden">
+      <Swiper
+        ref={swiperRef}
+        modules={[Autoplay, EffectFade, Navigation]}
+        spaceBetween={0}
+        slidesPerView={3}
+        loop={true}
+        centeredSlides={true}
+        speed={1500}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        effect="fade"
+        navigation={{
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        }}
+        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+        className="w-full h-full"
+      >
+        {extendedImages.map((img, index) => (
+          <SwiperSlide key={index} className="relative">
+            <motion.div
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="relative w-full h-full"
+            >
+              <Image
+                src={img.static ? img.src : `${API_BASE_URL + img.src}`}
+                alt={`${img.name} - ${index + 1}`}
+                fill
+                priority
+                className="object-cover transition-transform duration-700 ease-in-out hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                onError={(e) => {
+                  e.currentTarget.src = '/placeholder.svg'; // Image de secours
+                }}
+              />
+              <div className="absolute inset-0 bg-black/30 transition-opacity duration-300" />
+
+              <AnimatePresence>
+                {activeIndex === index % accommodations.length && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="absolute bottom-0 left-0 right-0 p-8 text-white bg-gradient-to-t from-black/70 to-transparent"
+                  >
+                    <h3 className="text-2xl font-bold mb-2">{img.name}</h3>
+                    <div className="flex items-center gap-2">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className={`w-5 h-5 ${i < img.note ? 'text-yellow-400' : 'text-gray-400'}`}
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Custom Navigation Buttons */}
+      <div className="absolute top-1/2 -translate-y-1/2 z-10 w-full pointer-events-none">
+        <div className="container mx-auto px-4">
+          <button
+            onClick={() => swiperRef.current?.swiper.slidePrev()}
+            className="swiper-button-prev absolute left-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm pointer-events-auto transition-all hover:bg-white/20"
+          >
+            <span className="sr-only">Previous</span>
+            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            onClick={() => swiperRef.current?.swiper.slideNext()}
+            className="swiper-button-next absolute right-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm pointer-events-auto transition-all hover:bg-white/20"
+          >
+            <span className="sr-only">Next</span>
+            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
-

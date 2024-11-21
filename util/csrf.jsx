@@ -1,7 +1,3 @@
-import Cookies from "js-cookie";
-import { UrlConfig } from "./config";
-import { useContext } from "react";
-import LayoutContext from "@/layouts/context/layoutContext";
 import { setTokensInCookies } from "./Cookies";
 
 
@@ -10,7 +6,7 @@ import { setTokensInCookies } from "./Cookies";
 
 export const getCsrfFromToken = async () => {
     try {
-        const response = await fetch(`${UrlConfig.apiBaseUrl}/api/get-csrf-token-direct/`, {
+        const response = await fetch(`${UrlConfig}/api/get-csrf-token-direct/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -32,7 +28,7 @@ export const getCsrfFromToken = async () => {
 
 
 export const custom_login = (username, password) => {
-    const url = `${UrlConfig.apiBaseUrl}/api/token/`;
+    const url = `${UrlConfig}/api/token/`;
     const csrfToken = getCsrfTokenDirect();
 
 
@@ -70,7 +66,7 @@ export const custom_login = (username, password) => {
 
 export const getCsrfTokenDirect = async () => {
     try {
-        const response = await fetch(`${UrlConfig.apiBaseUrl}/api/get-csrf-token-direct/`, {
+        const response = await fetch(`${UrlConfig}/api/get-csrf-token-direct/`, {
             method: "GET",
             credentials: "include",
             headers: {
