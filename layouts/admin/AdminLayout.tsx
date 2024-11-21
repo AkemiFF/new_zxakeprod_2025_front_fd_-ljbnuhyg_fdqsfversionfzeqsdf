@@ -1,22 +1,25 @@
 import Head from "next/head";
-import AdminTopBar from "./AdminTopBar";
-import style from './../../style/layouts/admin/AdminLayout.module.css';
+import { ReactNode, useContext } from "react";
 import AdminLayoutContext from "../context/adminLayoutContext";
-import { useContext } from "react";
-export default function AdminLayout(props){
-    
-    const {sideBar} = useContext(AdminLayoutContext);
+import AdminTopBar from "./AdminTopBar";
 
-    return(
+interface AdminLayoutProps {
+    children: ReactNode;
+}
+
+export default function AdminLayout({ children }: AdminLayoutProps) {
+    const { sideBar } = useContext(AdminLayoutContext);
+
+    return (
         <>
             <Head>
                 <title>Admin</title>
                 <meta charSet="UTF-8" />
             </Head>
-            <AdminTopBar/>
-            <div className={sideBar==true ? style.container_mini : style.container}>
-                {props.children}
+            <AdminTopBar />
+            <div className={`p-4 ${sideBar ? 'ml-20' : 'ml-64'} transition-all duration-300 ease-in-out`}>
+                {children}
             </div>
         </>
-    )
+    );
 }

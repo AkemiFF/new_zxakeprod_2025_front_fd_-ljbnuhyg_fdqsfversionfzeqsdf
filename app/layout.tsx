@@ -8,8 +8,6 @@ import { NavigationProvider } from "@/layouts/context/navigation"
 import { ResponsableLayoutProvider } from "@/layouts/context/responsableLayoutContext"
 import dynamic from "next/dynamic"
 import Script from "next/script"
-import 'primeicons/primeicons.css'
-import "primereact/resources/themes/lara-light-cyan/theme.css"
 import { useState } from "react"
 import './globals.css'
 
