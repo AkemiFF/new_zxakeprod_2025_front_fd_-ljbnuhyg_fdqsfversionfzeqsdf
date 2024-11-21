@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import LayoutContext from '@/layouts/context/layoutContext';
 import { checkIfClientLikedAccomodation, LikeAccomodation } from '@/util/Like';
 import Link from 'next/link';
@@ -20,91 +20,141 @@ export default function CardSuggestion(props: CardSuggestionProps) {
   const [isLiked, setIsLiked] = useState(false);
   const { user } = useContext(LayoutContext);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   useEffect(() => {
-    if (props.id) {
-      checkIfClientLikedAccomodation(props.id)
-        .then(setIsLiked)
-        .catch((error) => console.error('Error fetching like status:', error));
+    const fetchLikeStatus = async () => {
+      if (props.id) {
+        try {
+          const liked = await checkIfClientLikedAccomodation(props.id);
+          setIsLiked(liked);
+        } catch (error) {
+          console.error('Error fetching like status:', error);
+        }
+      }
+    };
+
+    if (user) {
+      fetchLikeStatus();
     }
   }, [props.id, user]);
 
-  const handleLikeClick = () => {
+  const handleLikeClick = async () => {
     if (!user) {
+      setToastMessage('Please login to like this accommodation');
       setShowToast(true);
       return;
     }
-    LikeAccomodation(props.id)
-      .then(() => {
+
+    if (props.id) {
+      try {
+        await LikeAccomodation(props.id);
         setIsLiked((prev) => !prev);
         setNbLike((prevNbLike) => (isLiked ? prevNbLike - 1 : prevNbLike + 1));
-      })
-      .catch((error) => console.error('Error liking the product:', error));
+      } catch (error) {
+        console.error('Error liking the product:', error);
+      }
+    }
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow max-w-md">
-      <div className="relative h-56">
+    <div className="relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden max-w-sm">
+      {/* Main Image */}
+      <div className="relative h-48 w-full">
         <Image
-          className="rounded-t-lg object-cover"
           src={props.image}
           alt={props.name}
           layout="fill"
+          objectFit="cover"
+          className="transition-transform duration-300 hover:scale-105"
         />
-        <div className="absolute top-2 left-2 bg-white p-2 rounded-full shadow-md">
-          <svg
-            className={`w-6 h-6 ${isLiked ? 'text-red-500' : 'text-gray-600'}`}
-            fill={isLiked ? 'currentColor' : 'none'}
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            onClick={handleLikeClick}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-        </div>
       </div>
 
+      {/* Content Wrapper */}
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 truncate">{props.name}</h3>
-        <p className="text-sm text-gray-600 mb-2">{props.localisation}</p>
-        <p className="text-sm text-gray-600 h-16 overflow-hidden">{props.description}</p>
-
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex items-center text-sm text-gray-800">
+        {/* Title and Location */}
+        <div className="mb-3">
+          <h3 className="text-lg font-bold text-gray-800 mb-1">{props.name}</h3>
+          <div className="flex items-center text-gray-600">
             <svg
-              className="w-4 h-4 text-yellow-500"
-              fill="currentColor"
+              className="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
             </svg>
-            <span className="ml-1">{props.note.toFixed(1)}</span>
+            <span className="text-sm">{props.localisation}</span>
           </div>
+        </div>
+
+        {/* Description */}
+        <div className="h-[70px] overflow-y-auto custom-scrollbar mb-4">
+          <p className="text-gray-600 text-sm">{props.description}</p>
+        </div>
+
+        {/* Rating and Like */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center bg-blue-800 text-white px-2 py-1 rounded-lg">
+            <Image
+              src="/images/star_filled.svg"
+              alt="star"
+              width={14}
+              height={14}
+              className="mr-1"
+            />
+            <span className="text-sm font-semibold">{props.note}</span>
+          </div>
+
           <button
-            onClick={props.onClick}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            onClick={handleLikeClick}
+            className="flex items-center space-x-1 text-gray-600 hover:text-red-500 transition-colors duration-200"
           >
-            View Details
+            <span className="text-sm">{nbLike}</span>
+            <svg
+              className={`w-5 h-5 ${isLiked ? 'text-red-500 fill-current' : 'stroke-current'}`}
+              fill={isLiked ? 'currentColor' : 'none'}
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
           </button>
         </div>
+
+        {/* View Button */}
+        <button
+          onClick={props.onClick}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+        >
+          View Details
+        </button>
       </div>
 
+      {/* Toast Notification */}
       {showToast && (
-        <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg">
-          <p>
-            No user connected{' '}
-            <Link href="/users/login" className="underline">
-              Login here
-            </Link>.
-          </p>
+        <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in">
+          <p>{toastMessage}</p>
+          <Link 
+            href="/users/login"
+            className="underline hover:text-blue-200 ml-2"
+          >
+            Login here
+          </Link>
           <button
             onClick={() => setShowToast(false)}
-            className="absolute top-2 right-2"
+            className="absolute top-2 right-2 text-white hover:text-blue-200"
           >
             ×
           </button>
